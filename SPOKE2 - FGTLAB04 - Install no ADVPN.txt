@@ -1,0 +1,214 @@
+===============================================
+>>>>>FGT-LAB04>>>>>>>>>>>>>>>>>>>>>>>>>>>
+config vpn ipsec phase1-interface
+    edit "HUB1-VPN1"
+        set interface "port1"
+        set ike-version 2
+        set comments "VPN: HUB1-VPN1 [Created by IPSEC Template]"
+        set proposal aes256-sha256
+        set peertype any
+        set mode-cfg enable
+        set localid "BranchLAB04"
+        set remote-gw 10.1.0.0
+        set net-device enable
+        set add-route disable
+        set psksecret ENC yhpFfw0hMtTMUSEk0/wc34xW4MVsUuXaJwNNoeZ+qw0ZIcx2/d6D6E8BAQpari+OldeJaAd4CHVSG+b6isyZnOB5gTQRWuHZGb2KpwK/ToUXO6LhA9xi0TXvzRUF2hKRpHB2wNas5gJuJ/oyi8xQ8jKh+1JoCqOB64YKcvni7F3G9AC1
+        set network-overlay enable
+        set network-id 1
+    next
+end
+config system interface
+    edit "HUB1-VPN1"
+        set vdom "root"
+        set type tunnel
+        set snmp-index 118
+        set interface "port1"
+    next
+end
+config vpn ipsec phase1-interface
+    edit "HUB1-VPN2"
+        set interface "port4"
+        set ike-version 2
+        set comments "VPN: HUB1-VPN2 [Created by IPSEC Template]"
+        set proposal aes256-sha256
+        set peertype any
+        set mode-cfg enable
+        set localid "BranchLAB04"
+        set remote-gw 10.1.0.0
+        set net-device enable
+        set add-route disable
+        set psksecret ENC yhpFfw0hMtTMUSEk0/wc34xW4MVsUuXaJwNNoeZ+qw0ZIcx2/d6D6E8BAQpari+OldeJaAd4CHVSG+b6isyZnOB5gTQRWuHZGb2KpwK/ToUXO6LhA9xi0TXvzRUF2hKRpHB2wNas5gJuJ/oyi8xQ8jKh+1JoCqOB64YKcvni7F3G9AC1
+        set network-overlay enable
+        set network-id 2
+    next
+end
+config system interface
+    edit "HUB1-VPN2"
+        set vdom "root"
+        set type tunnel
+        set snmp-index 119
+        set interface "port4"
+    next
+end
+config vpn ipsec phase1-interface
+    edit "HUB2-VPN1"
+        set interface "port1"
+        set ike-version 2
+        set comments "VPN: HUB2-VPN1 [Created by IPSEC Template]"
+        set proposal aes256-sha256
+        set peertype any
+        set mode-cfg enable
+        set localid "BranchLAB04"
+        set remote-gw 10.1.0.0
+        set net-device enable
+        set add-route disable
+        set psksecret ENC yhpFfw0hMtTMUSEk0/wc34xW4MVsUuXaJwNNoeZ+qw0ZIcx2/d6D6E8BAQpari+OldeJaAd4CHVSG+b6isyZnOB5gTQRWuHZGb2KpwK/ToUXO6LhA9xi0TXvzRUF2hKRpHB2wNas5gJuJ/oyi8xQ8jKh+1JoCqOB64YKcvni7F3G9AC1
+        set network-overlay enable
+        set network-id 5
+    next
+end
+config system interface
+    edit "HUB2-VPN1"
+        set vdom "root"
+        set type tunnel
+        set snmp-index 120
+        set interface "port1"
+    next
+end
+config vpn ipsec phase1-interface
+    edit "HUB2-VPN2"
+        set interface "port4"
+        set ike-version 2
+        set comments "VPN: HUB2-VPN2 [Created by IPSEC Template]"
+        set proposal aes256-sha256
+        set peertype any
+        set mode-cfg enable
+        set localid "BranchLAB04"
+        set remote-gw 10.1.0.0
+        set net-device enable
+        set add-route disable
+        set psksecret ENC yhpFfw0hMtTMUSEk0/wc34xW4MVsUuXaJwNNoeZ+qw0ZIcx2/d6D6E8BAQpari+OldeJaAd4CHVSG+b6isyZnOB5gTQRWuHZGb2KpwK/ToUXO6LhA9xi0TXvzRUF2hKRpHB2wNas5gJuJ/oyi8xQ8jKh+1JoCqOB64YKcvni7F3G9AC1
+        set network-overlay enable
+        set network-id 6
+    next
+end
+config system interface
+    edit "HUB2-VPN2"
+        set vdom "root"
+        set type tunnel
+        set snmp-index 121
+        set interface "port4"
+    next
+    edit "Branch0-Lo"
+        set vdom "root"
+        set ip 172.16.0.0 255.255.255.255
+        set allowaccess ping
+        set type loopback
+        set snmp-index 122
+    next
+end
+config vpn ipsec phase2-interface
+    edit "HUB1-VPN1"
+        set phase1name "HUB1-VPN1"
+        set proposal aes256-sha256
+        set auto-negotiate enable
+        set comments "VPN: HUB1-VPN1 [Created by IPSEC Template]"
+    next
+    edit "HUB1-VPN2"
+        set phase1name "HUB1-VPN2"
+        set proposal aes256-sha256
+        set auto-negotiate enable
+        set comments "VPN: HUB1-VPN2 [Created by IPSEC Template]"
+    next
+    edit "HUB2-VPN1"
+        set phase1name "HUB2-VPN1"
+        set proposal aes256-sha256
+        set auto-negotiate enable
+        set comments "VPN: HUB2-VPN1 [Created by IPSEC Template]"
+    next
+    edit "HUB2-VPN2"
+        set phase1name "HUB2-VPN2"
+        set proposal aes256-sha256
+        set auto-negotiate enable
+        set comments "VPN: HUB2-VPN2 [Created by IPSEC Template]"
+    next
+end
+config router prefix-list
+    edit "all_prefixes"
+        config rule
+            edit 1
+                set prefix any
+                unset ge
+                unset le
+            next
+        end
+    next
+end
+config router route-map
+    edit "VLAN100_VLAN200_only"
+        config rule
+            edit 1
+                set match-interface "VLAN100"
+            next
+            edit 2
+                set match-interface "VLAN200"
+            next
+            edit 3
+                set action deny
+                set match-ip-address "all_prefixes"
+            next
+        end
+    next
+end
+config router bgp
+    set as 69420
+    set router-id 172.16.0.0
+    set ibgp-multipath enable
+    set graceful-restart enable
+    config neighbor
+        edit "10.10.159.253"
+            set advertisement-interval 1
+            set capability-graceful-restart enable
+            set link-down-failover enable
+            set soft-reconfiguration enable
+            set description "HUB2-VPN1"
+            set interface "HUB2-VPN1"
+            set remote-as 69420
+            set connect-timer 10
+        next
+        edit "10.10.191.253"
+            set advertisement-interval 1
+            set capability-graceful-restart enable
+            set link-down-failover enable
+            set soft-reconfiguration enable
+            set description "HUB2-VPN2"
+            set interface "HUB2-VPN2"
+            set remote-as 69420
+            set connect-timer 10
+        next
+        edit "10.10.31.253"
+            set advertisement-interval 1
+            set capability-graceful-restart enable
+            set link-down-failover enable
+            set soft-reconfiguration enable
+            set description "HUB1-VPN1"
+            set interface "HUB1-VPN1"
+            set remote-as 69420
+            set connect-timer 10
+        next
+        edit "10.10.63.253"
+            set advertisement-interval 1
+            set capability-graceful-restart enable
+            set link-down-failover enable
+            set soft-reconfiguration enable
+            set description "HUB1-VPN2"
+            set interface "HUB1-VPN2"
+            set remote-as 69420
+            set connect-timer 10
+        next
+    end
+    config redistribute "connected"
+        set status enable
+        set route-map "VLAN100_VLAN200_only"
+    end
+end

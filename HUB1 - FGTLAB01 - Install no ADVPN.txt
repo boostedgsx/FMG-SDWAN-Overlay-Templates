@@ -1,0 +1,145 @@
+>>>>>FGT-LAB01>>>>>>>>>>>>>>>>>>>>>>>>>>>
+config vpn ipsec phase1-interface
+    edit "VPN1"
+        set type dynamic
+        set interface "port1"
+        set ike-version 2
+        set dpd on-idle
+        set comments "VPN: VPN1 [Created by IPSEC Template]"
+        set proposal aes256-sha256
+        set peertype any
+        set mode-cfg enable
+        set dpd-retryinterval 60
+        set net-device disable
+        set add-route disable
+        set ipv4-start-ip 10.10.0.1
+        set ipv4-end-ip 10.10.31.252
+        set ipv4-netmask 255.255.224.0
+        set psksecret ENC Z8Zpc/bwU2j1HxCFWzO/XkWz1iP/WK4qAGVHE9oazICB+iffI2rIYiAN50IAzV0SZwM/Thbw6MwE16DZJTI0+Sq9A+tKWYoHzajUOs/4Mf0hZTe7XSbYOPBa+ySugCy9wljPCx2VnLgc51F/WwQl5xUsRNvJCIhCPvl5yKa9Wqsquxoj
+        set network-overlay enable
+        set network-id 1
+    next
+end
+config system interface
+    edit "VPN1"
+        set vdom "root"
+        set ip 10.10.31.253 255.255.255.255
+        set type tunnel
+        set remote-ip 10.10.31.254 255.255.224.0
+        set snmp-index 118
+        set interface "port1"
+    next
+end
+config vpn ipsec phase1-interface
+    edit "VPN2"
+        set type dynamic
+        set interface "port2"
+        set ike-version 2
+        set dpd on-idle
+        set comments "VPN: VPN2 [Created by IPSEC Template]"
+        set proposal aes256-sha256
+        set peertype any
+        set mode-cfg enable
+        set dpd-retryinterval 60
+        set net-device disable
+        set add-route disable
+        set ipv4-start-ip 10.10.32.1
+        set ipv4-end-ip 10.10.63.252
+        set ipv4-netmask 255.255.224.0
+        set psksecret ENC Z8Zpc/bwU2j1HxCFWzO/XkWz1iP/WK4qAGVHE9oazICB+iffI2rIYiAN50IAzV0SZwM/Thbw6MwE16DZJTI0+Sq9A+tKWYoHzajUOs/4Mf0hZTe7XSbYOPBa+ySugCy9wljPCx2VnLgc51F/WwQl5xUsRNvJCIhCPvl5yKa9Wqsquxoj
+        set network-overlay enable
+        set network-id 2
+    next
+end
+config system interface
+    edit "VPN2"
+        set vdom "root"
+        set ip 10.10.63.253 255.255.255.255
+        set type tunnel
+        set remote-ip 10.10.63.254 255.255.224.0
+        set snmp-index 119
+        set interface "port2"
+    next
+    edit "HUB1-Lo"
+        set vdom "root"
+        set ip 172.16.255.253 255.255.255.255
+        set allowaccess ping
+        set type loopback
+        set snmp-index 120
+    next
+end
+config vpn ipsec phase2-interface
+    edit "VPN1"
+        set phase1name "VPN1"
+        set proposal aes256-sha256
+        set comments "VPN: VPN1 [Created by IPSEC Template]"
+    next
+    edit "VPN2"
+        set phase1name "VPN2"
+        set proposal aes256-sha256
+        set comments "VPN: VPN2 [Created by IPSEC Template]"
+    next
+end
+config router prefix-list
+    edit "all_prefixes"
+        config rule
+            edit 1
+                set prefix any
+                unset ge
+                unset le
+            next
+        end
+    next
+end
+config router route-map
+    edit "VLAN100_VLAN200_only"
+        config rule
+            edit 1
+                set match-interface "VLAN100"
+            next
+            edit 2
+                set match-interface "VLAN200"
+            next
+            edit 3
+                set action deny
+                set match-ip-address "all_prefixes"
+            next
+        end
+    next
+end
+config router bgp
+    set as 69420
+    set router-id 172.16.255.253
+    set ibgp-multipath enable
+    set graceful-restart enable
+    config neighbor-group
+        edit "VPN1"
+            set capability-graceful-restart enable
+            set link-down-failover enable
+            set next-hop-self enable
+            set soft-reconfiguration enable
+            set remote-as 69420
+        next
+        edit "VPN2"
+            set capability-graceful-restart enable
+            set link-down-failover enable
+            set next-hop-self enable
+            set soft-reconfiguration enable
+            set remote-as 69420
+        next
+    end
+    config neighbor-range
+        edit 1
+            set prefix 10.10.0.0 255.255.224.0
+            set neighbor-group "VPN1"
+        next
+        edit 2
+            set prefix 10.10.32.0 255.255.224.0
+            set neighbor-group "VPN2"
+        next
+    end
+    config redistribute "connected"
+        set status enable
+        set route-map "VLAN100_VLAN200_only"
+    end
+end
