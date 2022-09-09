@@ -11,6 +11,8 @@ All Fortigates are configured with SDWAN and (2) active WAN ports, both behind N
 
 ## Configured Metadata variables: 
 
+I've included examples of the metadata variables to give you an idea of how these work as the Fortinet KB doesn't mention much about this, other than the branch_id variable. You can essentially create whatever you want. You're supposed to be able to use these for the interfaces under "Network Advertisements" in the templates, but I wasn't able to get that to work as it was trying to insert the variables into the installation configs which resulted in a failure. So in that case, I just use them for the wan interfaces in production.
+
 ### Location of the menu 
 
 ![Metadata Variables - Menu Location](https://user-images.githubusercontent.com/72212024/189391791-e867e746-3f17-424b-969e-382a43e99892.png)
@@ -35,6 +37,8 @@ All Fortigates are configured with SDWAN and (2) active WAN ports, both behind N
 </pre>
 
 ## SD-WAN Overlay Template Configuration Example
+
+This just walks you through the templates to give you an idea of how simple it is to generate and/or modify the current configurations at all of your Hub and Branch sites. Once the template is created, you can modify pretty much all of the settings or update route maps, etc. 
 
 ### SDWAN Overlay Template 1 of 5
 
@@ -63,7 +67,8 @@ All Fortigates are configured with SDWAN and (2) active WAN ports, both behind N
 
 ## There are (2) example configurations uploaded; "Install ADVPN" and "Install no ADVPN"
 
-### Screenshots of the example overlay configuration summaries
+I've included screenshots of these two configurations so you can get an idea of what settings I used when generating the templates.
+
 
 ## Install ADVPN
 
